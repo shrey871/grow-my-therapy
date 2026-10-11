@@ -1,305 +1,426 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
+
+// Centralized Reusable Theme Token Configuration
+const THEME = {
+  primary: "#0B132B",      // Obsidian Slate Navy
+  accent: "#A0422B",       // Terracotta Primary Accent
+  accentHover: "#883520",  // Darker Terracotta Hover
+  accentLight: "#E8A58F",  // Light Terracotta Contrast Highlight
+  cream: "#FBF9F5",        // Warm Sand Main Background
+  sand: "#F4EBE1",         // Soft Sand Secondary Container Accent
+};
 
 export default function Home() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleFaq = (index: number) => {
-    setActiveFaq(activeFaq === index ? null : index);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.name && formData.email && formData.message) {
-      setSubmitted(true);
-    }
+    setOpenFaq(openFaq === index ? null : index);
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F5] text-[#1E293B] font-sans relative selection:bg-[#E07A5F] selection:text-white">
-      {/* Background Glows */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-100/60 rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div className="absolute top-[30%] left-[-100px] w-[500px] h-[500px] bg-rose-100/50 rounded-full blur-[140px] pointer-events-none -z-10" />
+    <div className="min-h-screen bg-[#FBF9F5] text-[#0B132B] font-sans antialiased selection:bg-[#A0422B] selection:text-white">
+      
+      {/* LOCAL SEO SCHEMA (JSON-LD) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MedicalBusiness",
+            "name": "Dr. Maya Reynolds, PsyD - Clinical Psychologist",
+            "image": "https://www.drmayareynolds.com/dr-maya-reynolds.png",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "123 West Street",
+              "addressLocality": "Santa Monica",
+              "addressRegion": "CA",
+              "postalCode": "90401",
+              "addressCountry": "US"
+            },
+            "description": "Individual therapy for anxiety, trauma, and burnout in Santa Monica, CA and virtual care across California.",
+            "medicalSpecialty": ["Psychotherapy", "EMDR", "CognitiveBehavioralTherapy"]
+          }),
+        }}
+      />
 
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-[#FBF9F5]/85 border-b border-stone-200/60 px-6 lg:px-12 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-[#E07A5F] text-white flex items-center justify-center font-serif text-lg font-bold shadow-md shadow-[#E07A5F]/20">
-              M
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-serif font-semibold tracking-tight text-[#0B132B]">
-                Dr. Maya Reynolds, PsyD
-              </span>
-              <span className="text-[11px] text-stone-500 uppercase tracking-widest font-medium">
-                Licensed Clinical Psychologist
-              </span>
-            </div>
-          </div>
+      {/* 1. STICKY HEADER & RESPONSIVE NAVIGATION */}
+      <header className="sticky top-0 z-50 bg-[#FBF9F5]/95 backdrop-blur-md border-b border-stone-200 py-4 px-6 md:px-12 flex justify-between items-center relative">
+        <div>
+          <a href="#" className="font-serif text-xl font-bold tracking-tight text-[#0B132B] block">
+            Dr. Maya Reynolds, PsyD
+          </a>
+          <span className="text-xs text-stone-600 uppercase tracking-wider font-semibold block">
+            Licensed Clinical Psychologist
+          </span>
+        </div>
 
-          <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-stone-600">
-            <a href="#about" className="hover:text-[#E07A5F] transition-colors">About</a>
-            <a href="#services" className="hover:text-[#E07A5F] transition-colors">Services Offered</a>
-            <a href="#office" className="hover:text-[#E07A5F] transition-colors">Office Space</a>
-            <a href="#faq" className="hover:text-[#E07A5F] transition-colors">FAQ</a>
-            <a href="#contact" className="hover:text-[#E07A5F] transition-colors">Contact</a>
-          </div>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-stone-700">
+          <a href="#about" className="hover:text-[#A0422B] transition">About</a>
+          <a href="#who-i-help" className="hover:text-[#A0422B] transition">Who I Help</a>
+          <a href="#how-i-work" className="hover:text-[#A0422B] transition">How I Work</a>
+          <a href="#services" className="hover:text-[#A0422B] transition">Services</a>
+          <a href="#office" className="hover:text-[#A0422B] transition">Our Office</a>
+          <a href="#faq" className="hover:text-[#A0422B] transition">FAQ</a>
+        </nav>
 
+        <div className="flex items-center gap-3">
           <a
             href="#contact"
-            className="bg-[#0B132B] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#E07A5F] transition-all duration-300 shadow-sm"
+            className="hidden sm:inline-block bg-[#0B132B] text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-stone-800 transition"
           >
-            Book a Consultation
+            Book Consultation
           </a>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            type="button"
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden h-10 w-10 rounded-full border border-stone-300 text-xl flex items-center justify-center text-[#0B132B]"
+          >
+            {menuOpen ? "✕" : "☰"}
+          </button>
         </div>
-      </nav>
 
-      {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 pt-16 pb-20 grid lg:grid-cols-12 gap-12 items-center">
+        {/* Mobile Nav Dropdown Panel */}
+        {menuOpen && (
+          <nav className="md:hidden absolute left-0 right-0 top-full bg-[#FBF9F5] border-b border-stone-200 px-6 py-4 flex flex-col gap-3 font-medium text-stone-800 shadow-lg">
+            {[
+              ["About", "#about"],
+              ["Who I Help", "#who-i-help"],
+              ["How I Work", "#how-i-work"],
+              ["Services", "#services"],
+              ["Our Office", "#office"],
+              ["FAQ", "#faq"],
+              ["Book Consultation", "#contact"],
+            ].map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className="py-1 hover:text-[#A0422B] transition"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+        )}
+      </header>
+
+      {/* 2. HERO SECTION */}
+      <section className="max-w-7xl mx-auto px-6 py-16 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-7 space-y-6">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-100/80 border border-amber-200 text-xs font-semibold text-[#8C4A32]">
-            <span className="w-2 h-2 rounded-full bg-[#E07A5F]" />
-            <span>Santa Monica Practice & Virtual Care Across California</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#0B132B] font-medium leading-[1.15]">
-            A space to exhale: <br />
-            <span className="italic font-normal text-[#E07A5F]">Anxiety, trauma,</span> & burnout therapy.
+          <p className="text-[#A0422B] text-xs font-bold tracking-wider uppercase">
+            A space to exhale • In-Person &amp; Telehealth
+          </p>
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-normal leading-tight text-[#0B132B]">
+            Anxiety, Trauma &amp; Burnout Therapy in{" "}
+            <span className="italic text-[#A0422B] whitespace-nowrap">Santa Monica, CA</span>
           </h1>
-
-          <p className="text-base sm:text-lg text-stone-600 leading-relaxed max-w-xl">
+          <p className="text-stone-700 text-lg max-w-xl leading-relaxed">
             Therapy for high-achieving, thoughtful, and self-aware adults who internally feel exhausted, stuck in overthinking, or emotionally on edge.
           </p>
-
-          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <div className="flex flex-wrap gap-4 pt-2">
             <a
               href="#contact"
-              className="bg-[#E07A5F] text-white text-center font-medium px-8 py-4 rounded-full hover:bg-[#d0694e] transition-all shadow-lg shadow-[#E07A5F]/25"
+              className="bg-[#A0422B] text-white px-7 py-3.5 rounded-full font-semibold hover:bg-[#883520] shadow-sm transition"
             >
               Schedule Free Consultation
             </a>
             <a
               href="#services"
-              className="border border-stone-300 text-[#0B132B] text-center font-medium px-8 py-4 rounded-full hover:bg-stone-100 transition-all"
+              className="border border-stone-300 text-[#0B132B] px-7 py-3.5 rounded-full font-semibold hover:bg-stone-100 transition"
             >
               Explore Specializations
             </a>
           </div>
-
-          <div className="pt-8 flex flex-wrap items-center gap-2 text-xs font-medium text-stone-500">
-            <span className="uppercase text-[10px] tracking-widest text-stone-400 font-semibold mr-2">Evidence-Based Methods:</span>
-            {['Cognitive-Behavioral Therapy (CBT)', 'EMDR Therapy', 'Mindfulness Practices', 'Body-Oriented Techniques'].map((tag) => (
-              <span key={tag} className="bg-white border border-stone-200/80 px-3.5 py-1.5 rounded-full shadow-sm text-stone-700">
-                {tag}
-              </span>
-            ))}
-          </div>
         </div>
 
-        {/* Hero Portrait Card */}
-        <div className="lg:col-span-5 relative flex items-center justify-center">
-          <div className="bg-white p-6 rounded-[2.5rem] border border-stone-200/80 shadow-xl shadow-stone-200/50 w-full max-w-md space-y-5">
-            <div className="relative w-full h-80 rounded-2xl overflow-hidden bg-stone-100">
-              <img
-                src="/dr-maya-reynolds.png"
-                alt="Dr. Maya Reynolds, PsyD"
-                className="w-full h-full object-cover object-top"
-              />
-              <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-stone-200 text-xs font-semibold text-[#0B132B]">
-                ✨ Dr. Maya Reynolds, PsyD
-              </div>
+        {/* Hero Image Grid */}
+        <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+          <div className="space-y-4">
+            <img
+              src="/dr-maya-reynolds.png"
+              alt="Portrait of Dr. Maya Reynolds, PsyD"
+              className="w-full h-64 object-cover rounded-2xl shadow-sm border border-stone-200"
+            />
+            <div className="bg-white p-4 rounded-2xl border border-stone-200 text-center">
+              <p className="text-xs font-bold text-[#0B132B]">In-Person Practice</p>
+              <p className="text-[11px] text-stone-500">Santa Monica, CA</p>
             </div>
-
-            <div className="space-y-2 text-center">
-              <h3 className="font-serif text-xl font-semibold text-[#0B132B]">
-                Licensed Clinical Psychologist
-              </h3>
-              <p className="text-xs text-stone-600 leading-relaxed italic">
-                "I believe therapy works best when clients feel respected, understood, and actively involved in the process."
-              </p>
-            </div>
-
-            <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                In-Person & Telehealth
-              </span>
-              <span className="font-semibold text-[#E07A5F]">Santa Monica, CA</span>
-            </div>
+          </div>
+          <div className="space-y-4 pt-6">
+            <img
+              src="/office-brick.jpeg"
+              alt="Therapy consulting room with exposed brick and comfortable seating"
+              className="w-full h-72 object-cover rounded-2xl shadow-sm border border-stone-200"
+            />
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="max-w-7xl mx-auto px-6 py-20 border-t border-stone-200/60">
-        <div className="grid lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5">
-            <div className="rounded-3xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-              <img
-                src="/therapy-session.png"
-                alt="Dr. Maya Reynolds in an active therapy session"
-                className="w-full h-[28rem] object-cover object-top"
-              />
-            </div>
-          </div>
-          <div className="lg:col-span-7 space-y-4">
-            <span className="text-xs uppercase tracking-widest text-[#E07A5F] font-bold">About Dr. Maya Reynolds, PsyD</span>
-            <h2 className="text-3xl font-serif text-[#0B132B] font-medium">A warm, collaborative, and grounded approach</h2>
-            <p className="text-stone-600 leading-relaxed text-sm">
-              I’m a licensed clinical psychologist based in Santa Monica, California, offering therapy for adults who feel overwhelmed by anxiety, stress, or the lingering effects of past experiences. Many of the people I work with are high-achieving, thoughtful, and self-aware—but internally feel exhausted, stuck in overthinking, or emotionally on edge.
-            </p>
-            <p className="text-stone-600 leading-relaxed text-sm">
-              Sessions are structured enough to feel supportive, while leaving space for reflection and depth. I integrate Cognitive-Behavioral Therapy (CBT), EMDR, mindfulness-based practices, and body-oriented techniques to help clients understand both the emotional and physiological sides of what they’re experiencing.
-            </p>
-            <p className="text-stone-600 leading-relaxed text-sm">
-              My goal is not just symptom relief, but helping clients develop insight, resilience, and a stronger relationship with themselves over time.
-            </p>
-          </div>
+      {/* 3. CORE METHODS STRIP */}
+      <section className="bg-[#F4EBE1]/60 py-6 border-y border-stone-200">
+        <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center items-center gap-3 text-xs font-semibold text-stone-700">
+          <span className="text-[#A0422B] uppercase tracking-wider text-[11px] font-bold mr-2">Core Methods:</span>
+          <span className="bg-white px-3.5 py-1.5 rounded-full border border-stone-200">Cognitive Behavioral Therapy (CBT)</span>
+          <span className="bg-white px-3.5 py-1.5 rounded-full border border-stone-200">EMDR Trauma Recovery</span>
+          <span className="bg-white px-3.5 py-1.5 rounded-full border border-stone-200">Somatic &amp; Mindfulness Practices</span>
+          <span className="bg-white px-3.5 py-1.5 rounded-full border border-stone-200">California Telehealth</span>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="max-w-7xl mx-auto px-6 py-20 border-t border-stone-200/60">
-        <div className="max-w-2xl mb-16">
-          <span className="text-xs uppercase tracking-widest text-[#E07A5F] font-bold">Clinical Specializations</span>
-          <h2 className="text-3xl sm:text-4xl font-serif text-[#0B132B] font-medium mt-2">
-            Practical tools combined with depth-oriented care
+      {/* 4. ABOUT / BIO SECTION */}
+      <section id="about" className="scroll-mt-24 max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="lg:col-span-5">
+          <img
+            src="/dr-maya-reynolds.png"
+            alt="Dr. Maya Reynolds, clinical psychologist in Santa Monica, CA"
+            className="w-full h-[420px] object-cover rounded-3xl shadow-sm border border-stone-200"
+          />
+        </div>
+        <div className="lg:col-span-7 space-y-5">
+          <p className="text-[#A0422B] text-xs font-bold tracking-wider uppercase">Grounded, Warm &amp; Collaborative</p>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#0B132B]">Hi, I’m Dr. Maya Reynolds.</h2>
+          <p className="text-stone-700 leading-relaxed">
+            I specialize in working with high-achieving adults, professionals, and creatives who feel internally overwhelmed while maintaining high standards on the outside. My approach blends evidence-based techniques like CBT and EMDR with somatic and mindfulness practices.
+          </p>
+          <p className="text-stone-700 leading-relaxed">
+            Whether you are healing from complex past trauma, managing chronic anxiety, or navigating workplace burnout, we will work at a pace that feels safe, structured, and collaborative.
+          </p>
+        </div>
+      </section>
+
+      {/* 5. "WHO I HELP" SECTION */}
+      <section id="who-i-help" className="scroll-mt-24 max-w-7xl mx-auto px-6 py-20 border-t border-stone-200">
+        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+          <p className="text-[#A0422B] text-xs font-bold tracking-wider uppercase">Tailored Support</p>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#0B132B]">
+            Who I Help
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            {
-              title: 'Anxiety & Panic',
-              icon: '☀️',
-              badge: 'Individual Care',
-              desc: 'Support for adults feeling functional on the outside while struggling with constant worry, body tension, sleeping difficulty, or bracing for something to go wrong.'
-            },
-            {
-              title: 'Trauma & EMDR Recovery',
-              icon: '🕊️',
-              badge: 'Paced & Safe',
-              desc: 'Paced trauma therapy focused on safety and stabilization for single-incident events or complex patterns stemming from childhood, relationships, or chronic stress.'
-            },
-            {
-              title: 'Burnout & Perfectionism',
-              icon: '🌱',
-              badge: 'Creatives & Executives',
-              desc: 'Tailored for entrepreneurs, creatives, and professionals feeling disconnected after years of pushing through stress, helping you develop sustainable ways of living and working.'
-            },
-            {
-              title: 'Somatic & Body-Oriented',
-              icon: '🌊',
-              badge: 'Mind-Body Care',
-              desc: 'Addressing both emotional and physiological experiences, utilizing body-centered practices to help you feel more regulated in daily life.'
-            },
-            {
-              title: 'California Telehealth',
-              icon: '💻',
-              badge: 'Virtual Care',
-              desc: 'Secure, HIPAA-compliant telehealth sessions providing depth-oriented therapy to clients located anywhere within California.'
-            },
-            {
-              title: 'Santa Monica In-Person',
-              icon: '🏛️',
-              badge: 'In-Person Sanctuary',
-              desc: 'In-person therapy held in a quiet, private office designed with natural light and an uncluttered environment to help you feel at ease upon arrival.'
-            },
-          ].map((service, i) => (
-            <div key={i} className="bg-white p-8 rounded-3xl border border-stone-200/80 hover:border-[#E07A5F]/50 transition-all shadow-sm flex flex-col justify-between group">
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-3xl">{service.icon}</span>
-                  <span className="text-[11px] font-semibold uppercase bg-amber-50 text-[#8C4A32] border border-amber-200 px-3 py-1 rounded-full">{service.badge}</span>
-                </div>
-                <h3 className="text-xl font-serif font-semibold text-[#0B132B] mb-3 group-hover:text-[#E07A5F] transition-colors">{service.title}</h3>
-                <p className="text-sm text-stone-600 leading-relaxed">{service.desc}</p>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm flex flex-col justify-between">
+            <img
+              src="/therapy-session.png"
+              alt="Comfortable therapy conversation setting with natural daylight"
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-6 space-y-3">
+              <h3 className="font-serif text-xl font-bold text-[#0B132B]">High-Achieving Professionals</h3>
+              <p className="text-stone-600 text-sm leading-relaxed">
+                Adults who appear functional and capable externally while internally struggling with chronic worry, perfectionism, or racing thoughts.
+              </p>
             </div>
-          ))}
+          </div>
+
+          <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm flex flex-col justify-between">
+            <img
+              src="/office-bookshelf.jpeg"
+              alt="Quiet therapy office library corner"
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-6 space-y-3">
+              <h3 className="font-serif text-xl font-bold text-[#0B132B]">Trauma &amp; Burnout Survivors</h3>
+              <p className="text-stone-600 text-sm leading-relaxed">
+                Individuals navigating single-incident events or complex relational patterns who want paced, safe stabilization and healing.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm flex flex-col justify-between">
+            <img
+              src="/office-brick.jpeg"
+              alt="Warm practice office interior"
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-6 space-y-3">
+              <h3 className="font-serif text-xl font-bold text-[#0B132B]">Creatives &amp; Entrepreneurs</h3>
+              <p className="text-stone-600 text-sm leading-relaxed">
+                Thoughtful adults seeking sustainable tools to restore emotional regulation without sacrificing their personal standards.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Office & Location Section */}
-      <section id="office" className="max-w-7xl mx-auto px-6 py-20 border-t border-stone-200/60">
-        <div className="space-y-8">
-          <div className="max-w-3xl space-y-3">
-            <span className="text-xs uppercase tracking-widest text-[#E07A5F] font-bold">Office Environment</span>
-            <h2 className="text-3xl font-serif text-[#0B132B] font-medium">A calm and grounding sanctuary in Santa Monica</h2>
-            <p className="text-stone-600 leading-relaxed text-sm">
-              My office is a quiet, private space designed to feel calm and grounding, featuring natural light and a comfortable, uncluttered environment[cite: 1, 2, 3, 4]. Clients often share that the space itself helps them feel more at ease when they arrive[cite: 1, 2, 3, 4].
+      {/* 6. SHORTENED ITALIC KEYWORD LIST */}
+      <section className="bg-white py-12 border-y border-stone-200">
+        <div className="max-w-4xl mx-auto px-6 divide-y divide-stone-200 text-center font-serif italic text-lg md:text-xl text-stone-700">
+          <div className="py-4">Anxiety &amp; Panic Relief</div>
+          <div className="py-4">Trauma &amp; EMDR Recovery</div>
+          <div className="py-4">Burnout &amp; Perfectionism Therapy</div>
+          <div className="py-4">Somatic &amp; Mindfulness Practices</div>
+          <div className="py-4">Santa Monica &amp; California Telehealth</div>
+        </div>
+      </section>
+
+      {/* 7. "HOW I WORK" SECTION */}
+      <section id="how-i-work" className="scroll-mt-24 py-20 bg-stone-100/60 border-b border-stone-200">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5">
+            <img
+              src="/therapy-session.png"
+              alt="Individual counseling setup"
+              className="w-full h-[420px] object-cover rounded-3xl shadow-sm border border-stone-200"
+            />
+          </div>
+          <div className="lg:col-span-7 space-y-5">
+            <p className="text-[#A0422B] text-xs font-bold tracking-wider uppercase">
+              Intentional &amp; Personalized Care
             </p>
-            <div className="p-4 bg-white rounded-2xl border border-stone-200 text-sm text-stone-700 space-y-1 max-w-xl">
-              <p className="font-semibold text-[#0B132B]">📍 Practice Office Address:</p>
-              <p className="text-stone-600">123th Street 45 W, Santa Monica, CA 90401</p>
-              <p className="text-xs text-stone-500 pt-1">In-person appointments in Santa Monica | Secure Telehealth statewide across California</p>
-            </div>
-          </div>
-
-          {/* Office Image Gallery */}
-          <div className="grid sm:grid-cols-2 gap-6 pt-4">
-            <div className="bg-white p-4 rounded-3xl border border-stone-200 shadow-md space-y-3">
-              <div className="h-72 rounded-2xl overflow-hidden bg-stone-100">
-                <img
-                  src="/office-brick.jpeg"
-                  alt="Santa Monica Therapy Office Seating Area"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <p className="text-xs text-center text-stone-500 font-medium">Santa Monica Office - Seating & Natural Light[cite: 1, 4]</p>
-            </div>
-
-            <div className="bg-white p-4 rounded-3xl border border-stone-200 shadow-md space-y-3">
-              <div className="h-72 rounded-2xl overflow-hidden bg-stone-100">
-                <img
-                  src="/office-bookshelf.jpeg"
-                  alt="Santa Monica Therapy Office Workspace"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <p className="text-xs text-center text-stone-500 font-medium">Santa Monica Office - Calm Uncluttered Environment[cite: 2, 3]</p>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#0B132B]">
+              How I Work
+            </h2>
+            <p className="text-stone-700 leading-relaxed">
+              I believe therapy works best when clients feel respected, understood, and actively involved. My approach blends evidence-based techniques like CBT and EMDR with somatic and mindfulness practices.
+            </p>
+            <p className="text-stone-700 leading-relaxed">
+              I take the time to deeply listen to your story, gently exploring emotions and developing practical tools tailored to your daily life.
+            </p>
+            <div className="pt-2">
+              <a
+                href="#about"
+                className="inline-block bg-[#0B132B] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-stone-800 transition"
+              >
+                Learn More About My Approach
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section id="faq" className="max-w-4xl mx-auto px-6 py-20 border-t border-stone-200/60">
-        <div className="text-center mb-12">
-          <span className="text-xs uppercase tracking-widest text-[#E07A5F] font-bold">Common Questions</span>
-          <h2 className="text-3xl font-serif text-[#0B132B] font-medium mt-2">Frequently Asked Questions</h2>
+      {/* 8. SPECIALTIES & CORE SERVICES */}
+      <section id="services" className="scroll-mt-24 max-w-7xl mx-auto px-6 py-20">
+        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+          <p className="text-[#A0422B] text-xs font-bold tracking-wider uppercase">Areas of Focus</p>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#0B132B]">
+            Anxiety, Trauma &amp; Burnout Specialties in Santa Monica
+          </h2>
+          <p className="text-stone-600">
+            Practical tools combined with depth-oriented care tailored to your individual goals.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-serif text-xl font-bold text-[#0B132B]">Anxiety &amp; Panic</h3>
+              <p className="text-stone-600 text-sm leading-relaxed">
+                Support for adults feeling functional on the outside while struggling with constant worry, body tension, sleeping difficulty, or bracing for something to go wrong.
+              </p>
+            </div>
+            <a href="#contact" className="inline-block text-[#A0422B] font-bold text-sm hover:underline">
+              Learn more →
+            </a>
+          </div>
+
+          <div className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-serif text-xl font-bold text-[#0B132B]">Trauma &amp; EMDR Recovery</h3>
+              <p className="text-stone-600 text-sm leading-relaxed">
+                Paced trauma therapy focused on safety and stabilization for single-incident events or complex patterns stemming from childhood, relationships, or chronic stress.
+              </p>
+            </div>
+            <a href="#contact" className="inline-block text-[#A0422B] font-bold text-sm hover:underline">
+              Learn more →
+            </a>
+          </div>
+
+          <div className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <div className="space-y-3">
+              <h3 className="font-serif text-xl font-bold text-[#0B132B]">Burnout &amp; Perfectionism</h3>
+              <p className="text-stone-600 text-sm leading-relaxed">
+                Tailored for entrepreneurs, creatives, and professionals feeling disconnected after years of pushing through stress, helping you develop sustainable ways of living.
+              </p>
+            </div>
+            <a href="#contact" className="inline-block text-[#A0422B] font-bold text-sm hover:underline">
+              Learn more →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. CUSTOM "OUR SANTA MONICA SANCTUARY" OFFICE SECTION */}
+      <section id="office" className="scroll-mt-24 bg-[#F4EBE1]/40 py-20 border-y border-stone-200">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5 space-y-4">
+            <p className="text-[#A0422B] text-xs font-bold tracking-wider uppercase">
+              A Calm Physical Space
+            </p>
+            <h2 className="font-serif text-3xl font-bold text-[#0B132B]">
+              Our Santa Monica Sanctuary
+            </h2>
+            <p className="text-stone-700 leading-relaxed">
+              Located at <strong className="text-[#0B132B]">123 West Street, Santa Monica, CA 90401</strong>, our physical practice space is intentionally curated to feel warm, safe, and private.
+            </p>
+            <p className="text-stone-700 leading-relaxed">
+              Featuring uncluttered surroundings, natural sunlight, and quiet seating, our office offers a serene environment where you can slow down and feel centered from the moment you arrive.
+            </p>
+          </div>
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <img
+              src="/office-brick.jpeg"
+              alt="Comfortable brick seating alcove in private therapy space"
+              className="w-full h-64 object-cover rounded-2xl shadow-sm border border-stone-200"
+            />
+            <img
+              src="/office-bookshelf.jpeg"
+              alt="Private bookshelf workspace bathed in natural sunlight"
+              className="w-full h-64 object-cover rounded-2xl shadow-sm border border-stone-200"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* 10. FAQ ACCORDION SECTION */}
+      <section id="faq" className="scroll-mt-24 max-w-4xl mx-auto px-6 py-20">
+        <div className="text-center max-w-xl mx-auto mb-12 space-y-3">
+          <p className="text-[#A0422B] text-xs font-bold tracking-wider uppercase">Common Questions</p>
+          <h2 className="font-serif text-3xl font-bold text-[#0B132B]">
+            Frequently Asked Questions
+          </h2>
         </div>
 
         <div className="space-y-4">
           {[
             {
-              q: 'Where is your therapy practice located?',
-              a: 'My office is located at 123th Street 45 W, Santa Monica, CA 90401. I also provide secure, HIPAA-compliant telehealth sessions to clients anywhere in California.'
+              q: "Do you offer in-person or online telehealth sessions?",
+              a: "I provide both in-person sessions at my office in Santa Monica, CA, and secure telehealth sessions for clients living anywhere across California.",
             },
             {
-              q: 'What therapeutic approaches do you integrate?',
-              a: 'I combine Cognitive-Behavioral Therapy (CBT), EMDR, mindfulness-based practices, and body-oriented somatic techniques to address both the emotional and physiological aspects of anxiety, trauma, and stress.'
+              q: "What modalities do you integrate into therapy?",
+              a: "I integrate evidence-based practices including Cognitive Behavioral Therapy (CBT), EMDR, somatic body-oriented methods, and mindfulness practices tailored to your specific goals.",
             },
             {
-              q: 'How does trauma therapy with EMDR work?',
-              a: 'Trauma work is carefully paced with an emphasis on safety and stabilization. We work with single-incident trauma as well as complex patterns, helping you feel regulated in daily life rather than just in session.'
+              q: "How do I know if we are a good fit?",
+              a: "I offer a complimentary 15-minute consultation call where we can discuss what you are looking for, answer any questions, and ensure my therapeutic approach feels right for you.",
             },
-          ].map((faq, index) => (
-            <div key={index} className="bg-white border border-stone-200 rounded-2xl overflow-hidden transition-all">
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm"
+            >
               <button
-                onClick={() => toggleFaq(index)}
-                className="w-full p-6 text-left font-serif font-medium text-lg text-[#0B132B] flex items-center justify-between hover:text-[#E07A5F] transition-colors"
+                type="button"
+                aria-expanded={openFaq === idx}
+                onClick={() => toggleFaq(idx)}
+                className="w-full px-6 py-5 text-left font-serif font-bold text-[#0B132B] flex justify-between items-center hover:bg-stone-50 transition"
               >
-                <span>{faq.q}</span>
-                <span className="text-xl ml-4">{activeFaq === index ? '−' : '+'}</span>
+                <span>{item.q}</span>
+                <span className="text-xl text-[#A0422B]">
+                  {openFaq === idx ? "−" : "+"}
+                </span>
               </button>
-              {activeFaq === index && (
-                <div className="px-6 pb-6 text-sm text-stone-600 leading-relaxed border-t border-stone-100 pt-4">
-                  {faq.a}
+              {openFaq === idx && (
+                <div className="px-6 pb-5 text-stone-700 text-sm leading-relaxed border-t border-stone-100 pt-3">
+                  {item.a}
                 </div>
               )}
             </div>
@@ -307,74 +428,69 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Form Section */}
-      <section id="contact" className="max-w-4xl mx-auto px-6 py-20 border-t border-stone-200/60">
-        <div className="text-center mb-10">
-          <span className="text-xs uppercase tracking-widest text-[#E07A5F] font-bold">Get In Touch</span>
-          <h2 className="text-3xl font-serif text-[#0B132B] font-medium mt-2">Schedule a Free Initial Consultation</h2>
-        </div>
-
-        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-stone-200 shadow-sm">
-          {submitted ? (
-            <div className="text-center py-8 space-y-3">
-              <span className="text-4xl">✨</span>
-              <h3 className="text-xl font-serif font-semibold text-[#0B132B]">Thank you for reaching out!</h3>
-              <p className="text-sm text-stone-600">Dr. Maya Reynolds will review your inquiry and get back to you within 24 business hours.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold uppercase text-stone-600 mb-2">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Jane Doe"
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:border-[#E07A5F] text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase text-stone-600 mb-2">Email Address *</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="jane@example.com"
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:border-[#E07A5F] text-sm"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase text-stone-600 mb-2">How can I help you? *</label>
-                <textarea
-                  required
-                  rows={4}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Share a brief overview of what you are seeking support with..."
-                  className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:border-[#E07A5F] text-sm"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-[#0B132B] text-white py-4 rounded-xl font-medium hover:bg-[#E07A5F] transition-all shadow-md text-sm"
+      {/* 11. FINAL CTA WITH LARGE VISUAL IMAGE */}
+      <section id="contact" className="scroll-mt-24 bg-[#0B132B] text-white py-20 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+          <div className="md:col-span-7 space-y-5 text-center md:text-left">
+            <p className="text-[#E8A58F] text-xs font-bold tracking-wider uppercase">Find A Therapist</p>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold leading-tight">
+              Find the pace that feels right for you.
+            </h2>
+            <p className="text-stone-300 text-sm max-w-lg leading-relaxed">
+              Schedule a free 15-minute consultation to discuss your therapy goals and explore how we can work together in Santa Monica or online across California.
+            </p>
+            <div className="pt-2">
+              <a
+                href="mailto:contact@drmayareynolds.com"
+                className="inline-block bg-[#A0422B] text-white px-8 py-3.5 rounded-full font-semibold hover:bg-[#883520] transition shadow-md"
               >
-                Send Message
-              </button>
-            </form>
-          )}
+                Schedule Consultation
+              </a>
+            </div>
+          </div>
+          <div className="md:col-span-5">
+            <img
+              src="/office-bookshelf.jpeg"
+              alt="Calm private therapy sanctuary interior"
+              className="w-full h-80 object-cover rounded-3xl shadow-lg border border-stone-800"
+            />
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#0B132B] text-stone-400 py-12 px-6 text-center text-xs">
-        <p className="text-stone-300 font-serif text-base mb-2">Dr. Maya Reynolds, PsyD</p>
-        <p className="mb-1">123th Street 45 W, Santa Monica, CA 90401</p>
-        <p>© 2026 Dr. Maya Reynolds, PsyD. All rights reserved. Santa Monica, CA & Telehealth statewide.</p>
+      {/* 12. EXPANDED FOOTER */}
+      <footer className="bg-stone-900 text-stone-400 text-xs py-12 px-6 border-t border-stone-800">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-stone-800">
+          <div className="space-y-3">
+            <p className="font-serif text-base text-white font-bold">Dr. Maya Reynolds, PsyD</p>
+            <p className="text-stone-400 leading-relaxed">
+              Licensed Clinical Psychologist providing in-person therapy in Santa Monica and telehealth throughout California.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <p className="font-bold text-white uppercase text-[11px] tracking-wider">Practice Location</p>
+            <p>123 West Street, Santa Monica, CA 90401</p>
+            <p>Email: contact@drmayareynolds.com</p>
+          </div>
+          <div className="space-y-2">
+            <p className="font-bold text-white uppercase text-[11px] tracking-wider">Navigation</p>
+            <div className="flex flex-col gap-1.5">
+              <a href="#about" className="hover:text-white transition">About Dr. Maya</a>
+              <a href="#services" className="hover:text-white transition">Therapy Services</a>
+              <a href="#office" className="hover:text-white transition">Office Sanctuary</a>
+              <a href="#faq" className="hover:text-white transition">Frequently Asked Questions</a>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-stone-400">
+          <p>© 2026 Dr. Maya Reynolds, PsyD. All rights reserved.</p>
+          <div className="flex gap-6">
+            <span>Santa Monica, CA</span>
+            <span>Statewide Telehealth</span>
+          </div>
+        </div>
       </footer>
+
     </div>
   );
 }
