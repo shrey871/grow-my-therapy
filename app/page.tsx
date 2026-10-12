@@ -29,7 +29,6 @@ const IMG = {
   officeB: "/office-bookshelf.jpeg",
   cta: "/dr-maya-reynolds.png",
   intro: "/office-brick.jpeg", // wide image under the intro text
-  specialtiesBanner: "/office-bookshelf.jpeg", // full-width banner above Specialties
 };
 
 // TODO: confirm every detail below against Dr. Maya's profile
@@ -480,45 +479,40 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 8. SPECIALTIES (3 services) */}
+        {/* 8. SPECIALTIES (3 services - image banner removed) */}
         <section id="specialties" className="scroll-mt-24">
-          <img
-            src={IMG.specialtiesBanner}
-            alt="Therapy office with built-in shelves and natural light in Santa Monica"
-            className="h-56 w-full object-cover md:h-72"
-          />
           <div className="mx-auto max-w-7xl px-6 py-20">
-          <div className="mx-auto mb-14 max-w-2xl space-y-3 text-center">
-            <Eyebrow>Areas of Focus</Eyebrow>
-            <h2 className="font-serif text-3xl font-bold md:text-4xl">
-              Anxiety, Trauma &amp; Burnout Specialties in Santa Monica
-            </h2>
-            <p className="text-stone-600">
-              Practical tools combined with depth-oriented care tailored to
-              your individual goals.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {SPECIALTIES.map((s) => (
-              <article
-                key={s.title}
-                className="flex flex-col justify-between space-y-4 rounded-2xl border border-stone-200 bg-white p-8 shadow-sm"
-              >
-                <div className="space-y-3">
-                  <h3 className="font-serif text-xl font-bold">{s.title}</h3>
-                  <p className="text-sm leading-relaxed text-stone-600">
-                    {s.text}
-                  </p>
-                </div>
-                <a
-                  href="#contact"
-                  className="inline-block text-sm font-bold text-[color:var(--accent)] hover:underline"
+            <div className="mx-auto mb-14 max-w-2xl space-y-3 text-center">
+              <Eyebrow>Areas of Focus</Eyebrow>
+              <h2 className="font-serif text-3xl font-bold md:text-4xl">
+                Anxiety, Trauma &amp; Burnout Specialties in Santa Monica
+              </h2>
+              <p className="text-stone-600">
+                Practical tools combined with depth-oriented care tailored to
+                your individual goals.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+              {SPECIALTIES.map((s) => (
+                <article
+                  key={s.title}
+                  className="flex flex-col justify-between space-y-4 rounded-2xl border border-stone-200 bg-white p-8 shadow-sm"
                 >
-                  Learn more →
-                </a>
-              </article>
-            ))}
-          </div>
+                  <div className="space-y-3">
+                    <h3 className="font-serif text-xl font-bold">{s.title}</h3>
+                    <p className="text-sm leading-relaxed text-stone-600">
+                      {s.text}
+                    </p>
+                  </div>
+                  <a
+                    href="#contact"
+                    className="inline-block text-sm font-bold text-[color:var(--accent)] hover:underline"
+                  >
+                    Learn more →
+                  </a>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
